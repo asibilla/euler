@@ -40,15 +40,44 @@ ProjectEulerHelpers.prototype = {
 
   // Return an array containing all divisors of n.
   returnDivisors(n) {
-    var divisors = [];
+    var divisorsLower = [];
+    var divisorsUpper = [];
     var limit = Math.ceil(Math.sqrt(n));
-    for (var i = 1; i < limit; i++) {
+    for (var i = 1; i <= limit; i++) {
       if (n % i === 0) {
-        divisors.push(i);
-        divisors.push(n / i);
+        divisorsLower.push(i);
+        divisorsUpper.unshift(n / i);
       }
     }
-    return divisors;
+    return divisorsLower.concat(divisorsUpper);
+  },
+
+  returnPrimeFactorization(input) {
+    var returnDivisors = this.returnDivisors;
+    var isPrime = this.isPrime;
+
+    if (isPrime(input)) {
+      return [];
+    }
+
+    var primeFactors = [];
+
+    function findDivisors(n) {
+      var divisors = returnDivisors(n);
+
+      for (var i = 0; i < divisors.length; i++) {
+        if (divisors[i] > 1) {
+          if (isPrime(divisors[i])) {
+            primeFactors.push(divisors[i]);
+            findDivisors(n / divisors[i]);
+            break;
+          }
+        }
+      }
+    }
+
+    findDivisors(input);
+    return primeFactors;
   },
 
   // Return all possible permutations of group size r for an array.
