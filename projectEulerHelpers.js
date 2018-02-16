@@ -39,7 +39,7 @@ ProjectEulerHelpers.prototype = {
   },
 
   // Return an array containing all divisors of n.
-  returnDivisors(n) {
+  returnDivisors : function(n) {
     var divisorsLower = [];
     var divisorsUpper = [];
     var limit = Math.ceil(Math.sqrt(n));
@@ -52,7 +52,21 @@ ProjectEulerHelpers.prototype = {
     return divisorsLower.concat(divisorsUpper);
   },
 
-  returnPrimeFactorization(input) {
+
+  reduceFraction : function(numerator, denominator) {
+    var factorsN = this.returnDivisors(numerator);
+    var factorsD = this.returnDivisors(denominator);
+    var gcf = false;
+    for (var i = factorsN.length; i > 0; i--) {
+      var factor = factorsN[i];
+      if (factor > 1 && factorsD.indexOf(factor) > -1) {
+        return this.reduceFraction(numerator / factor, denominator / factor);
+      }
+    }
+    return [numerator, denominator];
+  },
+
+  returnPrimeFactorization : function(input) {
     var returnDivisors = this.returnDivisors;
     var isPrime = this.isPrime;
 
@@ -193,7 +207,7 @@ ProjectEulerHelpers.prototype = {
   },
 
   // Same as above, but for multiplication.
-  longMultiplication(a1, a2) {
+  longMultiplication : function(a1, a2) {
     var results = [];
     for (var i = a1.length - 1; i >= 0; i--) {
       var add = 0;
